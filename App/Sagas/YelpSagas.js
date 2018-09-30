@@ -28,7 +28,7 @@ export function* getYelp(api, action) {
   if (response.ok) {
     // You might need to change the response here - do this with a 'transform',
     // located in ../Transforms/. Otherwise, just pass the data back from the api.
-    yield put(YelpActions.yelpRequest(response.data));
+    yield put(YelpActions.yelpSuccess(response.data));
   } else {
     yield put(YelpActions.yelpFailure());
   }

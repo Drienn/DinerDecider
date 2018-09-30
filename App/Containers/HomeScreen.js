@@ -26,19 +26,14 @@ class HomeScreen extends Component {
     this.findFood = this.findFood.bind(this);
   }
 
-  componentDidMount() {
-    const { yelpRequest } = this.props;
-
-    yelpRequest('location="PHX');
-  }
-
   findFood() {
-    console.log('finding food!');
+    const { yelpRequest } = this.props;
+    yelpRequest('location="PHX');
   }
 
   render() {
     const { cuisine, distance } = this.state;
-    console.log('the props?', this.props);
+    console.log('the render props', this.props.yelp);
     return (
       <ScrollView style={styles.homeContainer}>
         <KeyboardAvoidingView behavior="position">

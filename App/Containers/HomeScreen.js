@@ -4,7 +4,8 @@ import {
   Text,
   KeyboardAvoidingView,
   Button,
-  Picker
+  Picker,
+  Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 const { Item } = Picker;
@@ -28,12 +29,17 @@ class HomeScreen extends Component {
 
   findFood() {
     const { yelpRequest } = this.props;
-    yelpRequest('location="PHX');
+    const { cuisine, distance } = this.state;
+    if (!cuisine || !distance)
+      return Alert.alert(
+        `We'll narrow it down, but you gotta at least pick all the things!`
+      );
+    yelpRequest(`location="PHX&term=${cuisine}&distance=${distance}`);
   }
 
   render() {
     const { cuisine, distance } = this.state;
-    console.log('the render props', this.props.yelp);
+    console.log('the render props', this.props);
     return (
       <ScrollView style={styles.homeContainer}>
         <KeyboardAvoidingView behavior="position">

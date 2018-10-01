@@ -16,10 +16,21 @@ import YelpActions from '../Redux/YelpRedux';
 import styles from './Styles/HomeScreenStyle';
 
 class HomeScreen extends Component {
+  static getDerivedStateFromProps(props) {
+    const {
+      navigation: { navigate },
+      yelp: { payload }
+    } = props;
+
+    if (payload && payload.businesses) return navigate('ResultsScreen');
+
+    return null;
+  }
   constructor() {
     super();
 
     this.state = {
+      location: {},
       cuisine: '',
       distance: ''
     };
@@ -27,19 +38,35 @@ class HomeScreen extends Component {
     this.findFood = this.findFood.bind(this);
   }
 
+  componentDidMount() {
+    const {
+      geolocation: { getCurrentPosition }
+    } = navigator;
+    getCurrentPosition(({ coords: { latitude, longitude } }) => {
+      this.setState({ location: { latitude, longitude } });
+    });
+  }
+
   findFood() {
     const { yelpRequest } = this.props;
-    const { cuisine, distance } = this.state;
+    const {
+      cuisine,
+      distance,
+      location: { latitude, longitude }
+    } = this.state;
     if (!cuisine || !distance)
       return Alert.alert(
         `We'll narrow it down, but you gotta at least pick all the things!`
       );
-    yelpRequest(`location="PHX&term=${cuisine}&distance=${distance}`);
+    yelpRequest(
+      `latitude=${latitude}&longitude=${longitude}&term=${cuisine}&distance=${distance}`
+    );
+    console.log('this log waited!');
   }
 
   render() {
     const { cuisine, distance } = this.state;
-    console.log('the render props', this.props);
+    console.log('the render props', this.state);
     return (
       <ScrollView style={styles.homeContainer}>
         <KeyboardAvoidingView behavior="position">
